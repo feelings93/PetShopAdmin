@@ -23,6 +23,8 @@ import useHttp from './hooks/use-http';
 import { getProfile } from './lib/api/auth';
 import PetType from './pages/PetType';
 import PetTypeContextProvider from './store/pet-type-context';
+import BreedContextProvider from './store/breed-context';
+import Breed from './pages/Breed';
 
 const theme = createTheme({
   palette: {
@@ -124,6 +126,14 @@ function App() {
                 <PetTypeContextProvider>
                   <PetType />
                 </PetTypeContextProvider>
+              }
+            />
+            <Route
+              path='breed'
+              element={
+                <BreedContextProvider>
+                  <Breed />
+                </BreedContextProvider>
               }
             />
             <Route

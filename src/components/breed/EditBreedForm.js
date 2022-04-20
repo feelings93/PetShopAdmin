@@ -4,19 +4,19 @@ import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
-import LinearProgress from '@mui/material/LinearProgress';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
+import LinearProgress from '@mui/material/LinearProgress';
 import useHttp from '../../hooks/use-http';
-import { PetTypeContext } from '../../store/pet-type-context';
-import { createPetType } from '../../lib/api/pet-type';
+import { BreedContext } from '../../store/breed-context';
+import { editBreed } from '../../lib/api/breed';
 
-const AddPetTypeForm = () => {
-  const petTypeCtx = useContext(PetTypeContext);
-  const { handleAddPetType, handleCloseAdd, openAdd } = petTypeCtx;
-  const { data, error, sendRequest, status } = useHttp(createPetType);
-  const [name, setName] = React.useState('');
+const EditBreedForm = () => {
+  const breedCtx = useContext(BreedContext);
+  const { editBreedObj, handleEditBreed, handleCloseEdit, openEdit } = breedCtx;
+  const { data, error, sendRequest, status } = useHttp(editBreed);
+  const [name, setName] = React.useState(editBreedObj.name);
 
   const handleChangeName = (e) => {
     setName(e.target.value);
@@ -24,7 +24,7 @@ const AddPetTypeForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    sendRequest({ name });
+    sendRequest({ id: breedCtx.editBreedObj.id, name });
   };
 
   React.useEffect(() => {
@@ -32,35 +32,40 @@ const AddPetTypeForm = () => {
       if (data) {
         swal(
           'Thành công',
-          'Bạn đã thêm loại thú cưng mới thành công',
+          'Bạn đã chỉnh sửa giống thú cưng  thành công',
           'success'
         );
-        handleAddPetType(data);
-        handleCloseAdd();
+        handleEditBreed(data);
+        handleCloseEdit();
       } else if (error) swal('Thất bại', 'Đã có lỗi xảy ra', 'error');
     }
-  }, [data, status, error, handleAddPetType, handleCloseAdd]);
+  }, [data, status, error, handleEditBreed, handleCloseEdit]);
   return (
-    <Dialog open={openAdd}>
-        {status === 'pending' && <LinearProgress />}
+    <Dialog open={openEdit}>
+      {status === 'pending' && <LinearProgress />}
       <form onSubmit={handleSubmit}>
-        <DialogTitle>Thêm loại thú cưng</DialogTitle>
+        <DialogTitle>Chỉnh sửa giống thú cưng</DialogTitle>
         <DialogContent>
           <Stack mt={1} spacing={2}>
+            <TextField id='id' label='Id' disabled value={editBreedObj.id} />
             <TextField
-            required
+              required
               id='name'
-              label='Tên loại thú cưng'
+              label='Tên giống thú cưng'
               value={name}
               onChange={handleChangeName}
             />
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button variant='contained' type='submit'>
-            Thêm
+          <Button
+            disabled={status === 'pending'}
+            variant='contained'
+            type='submit'
+          >
+            Cập nhật
           </Button>
-          <Button variant='text' onClick={handleCloseAdd}>
+          <Button variant='text' onClick={handleCloseEdit}>
             Hủy bỏ
           </Button>
         </DialogActions>
@@ -69,4 +74,4 @@ const AddPetTypeForm = () => {
   );
 };
 
-export default AddPetTypeForm;
+export default EditBreedForm;

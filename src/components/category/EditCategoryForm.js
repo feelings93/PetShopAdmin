@@ -7,7 +7,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import Autocomplete from '@mui/material/Autocomplete';
 import LinearProgress from '@mui/material/LinearProgress';
 import useHttp from '../../hooks/use-http';
 import { editCategory } from '../../lib/api/category';
@@ -15,28 +14,18 @@ import { CategoryContext } from '../../store/category-context';
 
 const EditCategoryForm = () => {
   const categoryCtx = useContext(CategoryContext);
-  const {
-    editCateObj,
-    handleEditCategory,
-    handleCloseEdit,
-    openEdit,
-    categories,
-  } = categoryCtx;
+  const { editCateObj, handleEditCategory, handleCloseEdit, openEdit } =
+    categoryCtx;
   const { data, error, sendRequest, status } = useHttp(editCategory);
   const [name, setName] = React.useState(editCateObj.name);
-  const [parent, setParent] = React.useState(editCateObj.parent);
 
   const handleChangeName = (e) => {
     setName(e.target.value);
   };
 
-  const handleChangeParent = (e, value) => {
-    setParent(value);
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    sendRequest({ id: categoryCtx.editCateObj.id, name, parentId: parent?.id });
+    sendRequest({ id: categoryCtx.editCateObj.id, name });
   };
 
   React.useEffect(() => {
@@ -57,27 +46,11 @@ const EditCategoryForm = () => {
           <Stack mt={1} spacing={2}>
             <TextField id='id' label='Id' disabled value={editCateObj.id} />
             <TextField
+              required
               id='name'
               label='Tên danh mục'
               value={name}
               onChange={handleChangeName}
-            />
-            <Autocomplete
-              id='parent'
-              getOptionLabel={(option) => option.name}
-              onChange={handleChangeParent}
-              isOptionEqualToValue={(option, value) => {
-                return option.id === value.id;
-              }}
-              value={parent}
-              options={categories.filter((x) => x.parent === null)}
-              renderInput={(params) => (
-                <TextField
-                  // eslint-disable-next-line react/jsx-props-no-spreading
-                  {...params}
-                  label='Danh mục cha'
-                />
-              )}
             />
           </Stack>
         </DialogContent>

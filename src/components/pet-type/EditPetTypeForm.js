@@ -12,7 +12,7 @@ import useHttp from '../../hooks/use-http';
 import { PetTypeContext } from '../../store/pet-type-context';
 import { editPetType } from '../../lib/api/pet-type';
 
-const EditCategoryForm = () => {
+const EditPetTypeForm = () => {
   const petTypeCtx = useContext(PetTypeContext);
   const { editPetTypeObj, handleEditPetType, handleCloseEdit, openEdit } =
     petTypeCtx;
@@ -50,6 +50,7 @@ const EditCategoryForm = () => {
           <Stack mt={1} spacing={2}>
             <TextField id='id' label='Id' disabled value={editPetTypeObj.id} />
             <TextField
+            required
               id='name'
               label='Tên loại thú cưng'
               value={name}
@@ -74,4 +75,4 @@ const EditCategoryForm = () => {
   );
 };
 
-export default EditCategoryForm;
+export default EditPetTypeForm;

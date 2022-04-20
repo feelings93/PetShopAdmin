@@ -27,6 +27,8 @@ import BreedContextProvider from './store/breed-context';
 import Breed from './pages/Breed';
 import SubCategoryContextProvider from './store/sub-category';
 import SubCategory from './pages/SubCategory';
+import Employee from './pages/Employee';
+import EmployeeContextProvider from './store/employee-context';
 
 const theme = createTheme({
   palette: {
@@ -152,6 +154,14 @@ function App() {
                 <SubCategoryContextProvider>
                   <SubCategory />
                 </SubCategoryContextProvider>
+              }
+            />
+            <Route
+              path='employee'
+              element={
+                <EmployeeContextProvider>
+                  <Employee />
+                </EmployeeContextProvider>
               }
             />
             <Route path='*' element={<NotFound />} />

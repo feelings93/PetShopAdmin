@@ -25,6 +25,8 @@ import PetType from './pages/PetType';
 import PetTypeContextProvider from './store/pet-type-context';
 import BreedContextProvider from './store/breed-context';
 import Breed from './pages/Breed';
+import SubCategoryContextProvider from './store/sub-category';
+import SubCategory from './pages/SubCategory';
 
 const theme = createTheme({
   palette: {
@@ -142,6 +144,14 @@ function App() {
                 <CategoryContextProvider>
                   <Category />
                 </CategoryContextProvider>
+              }
+            />
+            <Route
+              path='sub-category'
+              element={
+                <SubCategoryContextProvider>
+                  <SubCategory />
+                </SubCategoryContextProvider>
               }
             />
             <Route path='*' element={<NotFound />} />

@@ -30,6 +30,8 @@ import { useAuth } from './hooks/use-auth';
 import PetContextProvider from './store/pet-context';
 import Pet from './pages/Pet';
 import PetDetail from './pages/PetDetail';
+import ServiceContextProvider from './store/service-context';
+import Service from './pages/Service';
 
 const theme = createTheme({
   palette: {
@@ -156,6 +158,14 @@ function App() {
                 <PetContextProvider>
                   <Pet />
                 </PetContextProvider>
+              }
+            />
+            <Route
+              path='service'
+              element={
+                <ServiceContextProvider>
+                  <Service />
+                </ServiceContextProvider>
               }
             />
             <Route path='*' element={<NotFound />} />

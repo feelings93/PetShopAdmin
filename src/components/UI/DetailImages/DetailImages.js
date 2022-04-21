@@ -14,7 +14,7 @@ const Input = styled('input')({
   display: 'none',
 });
 
-const ProductDetailImages = ({ images, onAdd, onDelete, edit }) => {
+const DetailImages = ({ images, onAdd, onDelete, edit }) => {
   const handleAddFiles = async (event) => {
     try {
       const urls = [];
@@ -123,11 +123,11 @@ const ProductDetailImages = ({ images, onAdd, onDelete, edit }) => {
   );
 };
 
-ProductDetailImages.propTypes = {
+DetailImages.propTypes = {
   images: PropTypes.arrayOf(PropTypes.shape()),
   onAdd: PropTypes.func,
   onDelete: PropTypes.func,
   edit: PropTypes.bool,
 };
 
-export default ProductDetailImages;
+export default DetailImages;

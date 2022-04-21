@@ -29,6 +29,7 @@ import EmployeeContextProvider from './store/employee-context';
 import { useAuth } from './hooks/use-auth';
 import PetContextProvider from './store/pet-context';
 import Pet from './pages/Pet';
+import PetDetail from './pages/PetDetail';
 
 const theme = createTheme({
   palette: {
@@ -107,7 +108,7 @@ function App() {
             />
             <Route path='order/:id' element={<OrderDetail />} />
             <Route path='product/:id' element={<ProductDetail />} />
-
+            <Route path='pet/:id' element={<PetDetail />} />
             <Route path='overview' element={<Overview />} />
             <Route
               path='pet-type'

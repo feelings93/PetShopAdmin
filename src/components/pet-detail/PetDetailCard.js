@@ -11,38 +11,32 @@ import useHttp from '../../hooks/use-http';
 import Stack from '@mui/material/Stack';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
-import { editProduct } from '../../lib/api/product';
+import { editPet } from '../../lib/api/pet';
 import { useForm } from 'react-hook-form';
-import PropTypes from 'prop-types';
 import swal from 'sweetalert';
 import { useNavigate } from 'react-router-dom';
 import DetailImages from '../UI/DetailImages/DetailImages';
 
-const ProductDetailCard = ({
-  product,
-  categories = [],
-  allSubCategories = [],
-}) => {
+const PetDetailCard = ({ pet, petTypes = [], allBreeds = [] }) => {
   const navigate = useNavigate();
-  const { sendRequest, data, status, error } = useHttp(editProduct);
+  const { sendRequest, data, status, error } = useHttp(editPet);
   const [edit, setEdit] = useState(false);
   const { register, handleSubmit } = useForm();
-  const [files, setFiles] = useState(product.photos.map(() => null));
-  const [photoUrls, setPhotoUrls] = useState(product.photos.map((x) => x.url));
-  const [category, setCategory] = useState(
-    categories.find((x) => x.id === product.category.id)
+  const [gender, setGender] = useState(pet.gender);
+  const [files, setFiles] = useState(pet.photos.map(() => null));
+  const [photoUrls, setPhotoUrls] = useState(pet.photos.map((x) => x.url));
+  const [type, setType] = useState(petTypes.find((x) => x.id === pet.type.id));
+  const [breed, setSubCategory] = useState(
+    allBreeds.find((x) => x.id === pet.breed.id)
   );
-  const [subCategory, setSubCategory] = useState(
-    allSubCategories.find((x) => x.id === product.subCategory.id)
-  );
-  const [subCategories, setSubCategories] = useState(() => {
-    const newSubCategories = [];
-    for (let i = 0; i < allSubCategories.length; i++) {
-      if (allSubCategories[i].category.id === category.id) {
-        newSubCategories.push(allSubCategories[i]);
+  const [breeds, setBreeds] = useState(() => {
+    const newBreeds = [];
+    for (let i = 0; i < allBreeds.length; i++) {
+      if (allBreeds[i].type.id === type.id) {
+        newBreeds.push(allBreeds[i]);
       }
     }
-    return newSubCategories;
+    return newBreeds;
   });
 
   const handleAddImages = (files, urls) => {
@@ -60,41 +54,43 @@ const ProductDetailCard = ({
   };
   const onSubmit = (data) => {
     console.log({
-      id: product.id,
+      id: pet.id,
       ...data,
-      category,
-      subCategory,
+      gender,
+      type,
+      breed,
       files,
       photoUrls,
     });
     sendRequest({
-      id: product.id,
+      id: pet.id,
       ...data,
-      category,
-      subCategory,
+      gender,
+      type,
+      breed,
       files,
       photoUrls,
     });
   };
 
   useEffect(() => {
-    const newSubCategories = [];
-    for (let i = 0; i < allSubCategories.length; i++) {
-      if (allSubCategories[i].category.id === category?.id) {
-        newSubCategories.push(allSubCategories[i]);
+    const newBreeds = [];
+    for (let i = 0; i < allBreeds.length; i++) {
+      if (allBreeds[i].type.id === type?.id) {
+        newBreeds.push(allBreeds[i]);
       }
     }
-    setSubCategories(newSubCategories);
-  }, [allSubCategories, category]);
+    setBreeds(newBreeds);
+  }, [allBreeds, type]);
 
   useEffect(() => {
     const showSuccessMsg = async () => {
       await swal(
-        'Cập nhật thông tin sản phẩm thành công',
+        'Cập nhật thông tin thú cưng thành công',
         'Thành công',
         'success'
       );
-      navigate('/product');
+      navigate('/pet');
     };
     if (status === 'completed') {
       if (data) {
@@ -108,7 +104,7 @@ const ProductDetailCard = ({
       {status === 'pending' && <LinearProgress />}
       <Card variant='outlined'>
         <CardHeader
-          title={<Typography variant='h6'>Thông tin sản phẩm</Typography>}
+          title={<Typography variant='h6'>Thông tin thú cưng</Typography>}
           action={
             !edit ? (
               <Button
@@ -124,8 +120,8 @@ const ProductDetailCard = ({
                 <Button
                   onClick={() => {
                     setEdit(false);
-                    setPhotoUrls(product.photos.map((x) => x.url));
-                    setFiles(product.photos.map(() => null));
+                    setPhotoUrls(pet.photos.map((x) => x.url));
+                    setFiles(pet.photos.map(() => null));
                   }}
                   variant='text'
                 >
@@ -164,7 +160,7 @@ const ProductDetailCard = ({
                   <TextField
                     required
                     disabled={!edit}
-                    defaultValue={product?.name}
+                    defaultValue={pet?.name}
                     {...register('name')}
                     fullWidth
                     size='small'
@@ -179,11 +175,11 @@ const ProductDetailCard = ({
                     disabled={!edit}
                     fullWidth
                     id='tags-outlined'
-                    options={categories}
+                    options={petTypes}
                     getOptionLabel={(option) => option.name}
-                    value={category}
+                    value={type}
                     onChange={(event, newValue) => {
-                      setCategory(newValue);
+                      setType(newValue);
                       setSubCategory(null);
                     }}
                     filterSelectedOptions
@@ -199,9 +195,9 @@ const ProductDetailCard = ({
                     disabled={!edit}
                     fullWidth
                     id='tags-outlined'
-                    options={subCategories}
+                    options={breeds}
                     getOptionLabel={(option) => option.name}
-                    value={subCategory}
+                    value={breed}
                     onChange={(event, newValue) => {
                       setSubCategory(newValue);
                     }}
@@ -217,7 +213,7 @@ const ProductDetailCard = ({
                     required
                     disabled={!edit}
                     type='number'
-                    defaultValue={product?.price}
+                    defaultValue={pet?.price}
                     {...register('price')}
                     fullWidth
                     size='small'
@@ -225,18 +221,37 @@ const ProductDetailCard = ({
                 </Stack>
                 <Stack direction='row' justifyContent='space-between'>
                   <Typography width='200px' variant='subtitle1'>
-                    Số lượng
+                    Tuổi
                   </Typography>
                   <TextField
                     required
                     type='number'
                     disabled={!edit}
-                    defaultValue={product?.quantity}
-                    {...register('quantity')}
+                    defaultValue={pet?.age}
+                    {...register('age')}
                     fullWidth
                     size='small'
                   />
                 </Stack>
+                <Stack direction='row' justifyContent='space-between'>
+                  <Typography width='200px' variant='subtitle1'>
+                    Giới tính
+                  </Typography>
+                  <Autocomplete
+                    value={gender}
+                    disabled={!edit}
+                    fullWidth
+                    onChange={(event, newValue) => {
+                      setGender(newValue);
+                    }}
+                    id='pet-type'
+                    options={['Đực', 'Cái']}
+                    renderInput={(params) => (
+                      <TextField required {...params} label='Giới tính' />
+                    )}
+                  />
+                </Stack>
+
                 <Stack direction='row' justifyContent='space-between'>
                   <Typography width='200px' variant='subtitle1'>
                     Mô tả
@@ -245,7 +260,7 @@ const ProductDetailCard = ({
                     disabled={!edit}
                     {...register('describe')}
                     fullWidth
-                    defaultValue={product?.describe}
+                    defaultValue={pet?.describe}
                     size='small'
                     multiline
                     minRows={4}
@@ -261,9 +276,4 @@ const ProductDetailCard = ({
   );
 };
 
-ProductDetailCard.propTypes = {
-  product: PropTypes.shape(),
-  categories: PropTypes.arrayOf(PropTypes.shape()),
-};
-
-export default ProductDetailCard;
+export default PetDetailCard;

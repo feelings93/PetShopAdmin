@@ -76,7 +76,7 @@ const Header = (props) => {
           aria-describedby={id}
           onClick={handleClick}
           src={
-            user.avatarUrl ||
+            user?.avatarUrl ||
             'https://cdn-icons-png.flaticon.com/512/149/149071.png'
           }
         />
@@ -122,19 +122,19 @@ const Header = (props) => {
             <Stack mt={2} direction='row'>
               <Avatar
                 src={
-                  user.avatarUrl ||
+                  user?.avatarUrl ||
                   'https://cdn-icons-png.flaticon.com/512/149/149071.png'
                 }
               />{' '}
               <Stack direction='column' sx={{ minWidth: '200px' }}>
                 <Typography variant='h6'>
-                  {user.lastName + ' ' + user.firstName}
+                  {user?.lastName + ' ' + user?.firstName}
                 </Typography>
                 <Typography variant='subtitle1' color='text.secondary'>
-                  {user.role}
+                  {user?.role}
                 </Typography>
                 <Typography variant='subtitle2' color='text.secondary'>
-                  {user.email}
+                  {user?.email}
                 </Typography>
               </Stack>
             </Stack>

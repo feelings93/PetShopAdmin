@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React from 'react';
 import './App.css';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,12 +15,9 @@ import CategoryContextProvider from './store/category-context';
 import User from './pages/User';
 import UserContextProvider from './store/user-context';
 import ProductContextProvider from './store/product-context';
-import { AuthContext } from './store/auth-context';
 import OrderContextProvider from './store/order-context';
 import OrderDetail from './pages/OrderDetail';
 import ProductDetail from './pages/ProductDetail';
-import useHttp from './hooks/use-http';
-import { getProfile } from './lib/api/auth';
 import PetType from './pages/PetType';
 import PetTypeContextProvider from './store/pet-type-context';
 import BreedContextProvider from './store/breed-context';
@@ -29,6 +26,7 @@ import SubCategoryContextProvider from './store/sub-category';
 import SubCategory from './pages/SubCategory';
 import Employee from './pages/Employee';
 import EmployeeContextProvider from './store/employee-context';
+import { useAuth } from './hooks/use-auth';
 
 const theme = createTheme({
   palette: {
@@ -59,33 +57,18 @@ const theme = createTheme({
 });
 
 function PrivateAdminOutlet() {
-  const authCtx = useContext(AuthContext);
-  const { user } = authCtx;
-  return user ? <Outlet /> : <Navigate to='/login' />;
+  const [data, status] = useAuth();
+  if (status === 'pending') return <h1>Loading</h1>;
+  return data ? <Outlet /> : <Navigate to='/login' />;
 }
 
 function RedirectWhenSignedInRoute() {
-  const authCtx = useContext(AuthContext);
-  const { user } = authCtx;
-  return !user ? <Outlet /> : <Navigate to='/' />;
+  const [data, status] = useAuth();
+  if (status === 'pending') return <h1>Loading</h1>;
+  return !data ? <Outlet /> : <Navigate to='/' />;
 }
 
 function App() {
-  const authCtx = useContext(AuthContext);
-  const { setUser, user } = authCtx;
-  const { data, status, sendRequest } = useHttp(getProfile, true);
-  useEffect(() => {
-    sendRequest();
-  }, [sendRequest]);
-  useEffect(() => {
-    if (status === 'completed') {
-      if (data) {
-        setUser(data);
-      }
-    }
-  }, [data, status, setUser]);
-  if (status === 'pending') return <h1>Loading</h1>;
-  console.log(user);
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

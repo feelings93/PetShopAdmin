@@ -16,19 +16,35 @@ import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import swal from 'sweetalert';
 import ProductDetailImages from './ProductDetailImages';
+import { useNavigate } from 'react-router-dom';
 
-const ProductDetailCard = ({ product, categories = [] }) => {
+const ProductDetailCard = ({
+  product,
+  categories = [],
+  allSubCategories = [],
+}) => {
+  const navigate = useNavigate();
   const { sendRequest, data, status, error } = useHttp(editProduct);
   const [edit, setEdit] = useState(false);
   const { register, handleSubmit } = useForm();
   const [files, setFiles] = useState(product.photos.map(() => null));
-
   const [photoUrls, setPhotoUrls] = useState(product.photos.map((x) => x.url));
-  const [selectedCategories, setSelectedCategories] = React.useState(
-    categories.filter((x) => {
-      return product.categories.map((x) => x.id).includes(x.id);
-    })
+  const [category, setCategory] = useState(
+    categories.find((x) => x.id === product.category.id)
   );
+  const [subCategory, setSubCategory] = useState(
+    allSubCategories.find((x) => x.id === product.subCategory.id)
+  );
+  const [subCategories, setSubCategories] = useState(() => {
+    const newSubCategories = [];
+    for (let i = 0; i < allSubCategories.length; i++) {
+      if (allSubCategories[i].category.id === category.id) {
+        newSubCategories.push(allSubCategories[i]);
+      }
+    }
+    return newSubCategories;
+  });
+
   const handleAddImages = (files, urls) => {
     setFiles((prev) => [...prev, ...files]);
     setPhotoUrls((prev) => [...prev, ...urls]);
@@ -46,18 +62,30 @@ const ProductDetailCard = ({ product, categories = [] }) => {
     console.log({
       id: product.id,
       ...data,
-      selectedCategories,
+      category,
+      subCategory,
       files,
       photoUrls,
     });
     sendRequest({
       id: product.id,
       ...data,
-      selectedCategories,
+      category,
+      subCategory,
       files,
       photoUrls,
     });
   };
+
+  useEffect(() => {
+    const newSubCategories = [];
+    for (let i = 0; i < allSubCategories.length; i++) {
+      if (allSubCategories[i].category.id === category?.id) {
+        newSubCategories.push(allSubCategories[i]);
+      }
+    }
+    setSubCategories(newSubCategories);
+  }, [allSubCategories, category]);
 
   useEffect(() => {
     const showSuccessMsg = async () => {
@@ -66,14 +94,14 @@ const ProductDetailCard = ({ product, categories = [] }) => {
         'Thành công',
         'success'
       );
-      window.location.reload();
+      navigate('/product');
     };
     if (status === 'completed') {
       if (data) {
         showSuccessMsg();
       } else if (error) swal('Đã có lỗi xảy ra', 'Thất bại', 'error');
     }
-  }, [status, data, error]);
+  }, [status, data, error, navigate]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -134,6 +162,7 @@ const ProductDetailCard = ({ product, categories = [] }) => {
                     Tên sản phẩm
                   </Typography>
                   <TextField
+                    required
                     disabled={!edit}
                     defaultValue={product?.name}
                     {...register('name')}
@@ -141,23 +170,43 @@ const ProductDetailCard = ({ product, categories = [] }) => {
                     size='small'
                   />
                 </Stack>
+
                 <Stack direction='row' justifyContent='space-between'>
                   <Typography width='200px' variant='subtitle1'>
                     Danh mục
                   </Typography>
                   <Autocomplete
                     disabled={!edit}
-                    multiple
                     fullWidth
                     id='tags-outlined'
                     options={categories}
                     getOptionLabel={(option) => option.name}
-                    value={selectedCategories}
+                    value={category}
                     onChange={(event, newValue) => {
-                      setSelectedCategories(newValue);
+                      setCategory(newValue);
+                      setSubCategory(null);
                     }}
                     filterSelectedOptions
-                    renderInput={(params) => <TextField {...params} />}
+                    required
+                    renderInput={(params) => <TextField required {...params} />}
+                  />
+                </Stack>
+                <Stack direction='row' justifyContent='space-between'>
+                  <Typography width='200px' variant='subtitle1'>
+                    Danh mục phụ
+                  </Typography>
+                  <Autocomplete
+                    disabled={!edit}
+                    fullWidth
+                    id='tags-outlined'
+                    options={subCategories}
+                    getOptionLabel={(option) => option.name}
+                    value={subCategory}
+                    onChange={(event, newValue) => {
+                      setSubCategory(newValue);
+                    }}
+                    filterSelectedOptions
+                    renderInput={(params) => <TextField required {...params} />}
                   />
                 </Stack>
                 <Stack direction='row' justifyContent='space-between'>
@@ -165,6 +214,7 @@ const ProductDetailCard = ({ product, categories = [] }) => {
                     Giá
                   </Typography>
                   <TextField
+                    required
                     disabled={!edit}
                     type='number'
                     defaultValue={product?.price}
@@ -178,6 +228,7 @@ const ProductDetailCard = ({ product, categories = [] }) => {
                     Số lượng
                   </Typography>
                   <TextField
+                    required
                     type='number'
                     disabled={!edit}
                     defaultValue={product?.quantity}

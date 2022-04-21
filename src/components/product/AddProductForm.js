@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import swal from 'sweetalert';
 import Button from '@mui/material/Button';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -17,6 +17,8 @@ import { ProductContext } from '../../store/product-context';
 import { createProduct } from '../../lib/api/product';
 import { getCategories } from '../../lib/api/category';
 import DropzoneImage from '../UI/Dropzone';
+import { getSubCategories } from '../../lib/api/sub-category';
+
 const AddProductForm = () => {
   const productCtx = useContext(ProductContext);
   const { handleAddProduct, handleCloseAdd } = productCtx;
@@ -27,11 +29,21 @@ const AddProductForm = () => {
     sendRequest: sendCategories,
     status: statusCategories,
   } = useHttp(getCategories, true);
+  const {
+    data: dataSubCategories,
+    error: errorSubCategories,
+    sendRequest: sendSubCategories,
+    status: statusSubCategories,
+  } = useHttp(getSubCategories, true);
 
   const [name, setName] = React.useState('');
-  const [categories, setCategories] = React.useState([]);
-  const [selectedCategories, setSelectedCategories] = React.useState([]);
+  const [category, setCategory] = useState(null);
+  const [categories, setCategories] = useState([]);
+
+  const [subCategory, setSubCategory] = useState(null);
+  const [subCategories, setSubCategories] = useState([]);
   const [quantity, setQuantity] = React.useState(undefined);
+  const [describe, setDescribe] = React.useState('');
   const [price, setPrice] = React.useState(undefined);
   const [files, setFiles] = React.useState([]);
   const handleChangeName = (e) => {
@@ -52,27 +64,60 @@ const AddProductForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    sendRequest({ name, selectedCategories, files, price, quantity });
+    sendRequest({
+      name,
+      category,
+      subCategory,
+      files,
+      price,
+      quantity,
+    });
   };
 
   React.useEffect(() => {
     sendCategories();
-  }, [sendCategories]);
+    sendSubCategories();
+  }, [sendCategories, sendSubCategories]);
 
   React.useEffect(() => {
-    if (statusCategories === 'completed' && dataCategories) {
-      setCategories(dataCategories);
-    } else if (statusCategories === 'error' && errorCategories) {
+    if (
+      (statusCategories === 'completed' &&
+        (!dataCategories || errorCategories)) ||
+      (statusSubCategories === 'completed' &&
+        (!dataSubCategories || errorSubCategories))
+    ) {
       swal('Lỗi', 'Đã có lỗi xảy ra', 'error');
       handleCloseAdd();
+    } else if (
+      statusSubCategories === 'completed' &&
+      dataSubCategories &&
+      statusCategories === 'completed' &&
+      dataCategories
+    ) {
+      setSubCategories(dataSubCategories);
+      setCategories(dataCategories);
     }
   }, [
     dataCategories,
     statusCategories,
-    setCategories,
     errorCategories,
     handleCloseAdd,
+    statusSubCategories,
+    dataSubCategories,
+    errorSubCategories,
   ]);
+
+  useEffect(() => {
+    if (statusSubCategories === 'completed' && dataSubCategories) {
+      const newSubCategories = [];
+      for (let i = 0; i < dataSubCategories.length; i++) {
+        if (dataSubCategories[i].category.id === category?.id) {
+          newSubCategories.push(dataSubCategories[i]);
+        }
+      }
+      setSubCategories(newSubCategories);
+    }
+  }, [dataSubCategories, category, statusSubCategories]);
 
   React.useEffect(() => {
     if (status === 'completed') {
@@ -87,7 +132,8 @@ const AddProductForm = () => {
   return (
     <Dialog maxWidth='md' open={true}>
       {status === 'pending' && <LinearProgress />}
-      {statusCategories === 'pending' ? (
+
+      {statusCategories === 'pending' || statusSubCategories === 'pending' ? (
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={true}
@@ -123,14 +169,33 @@ const AddProductForm = () => {
                 onChange={handleChangeQuantity}
               />
               <Autocomplete
-                multiple
                 id='tags-outlined'
                 options={categories}
                 getOptionLabel={(option) => option.name}
-                value={selectedCategories}
+                value={category}
                 onChange={(event, newValue) => {
                   console.log(newValue);
-                  setSelectedCategories(newValue);
+                  setCategory(newValue);
+                  setSubCategory(null);
+                }}
+                filterSelectedOptions
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    required
+                    label='Chọn danh mục'
+                    placeholder='Danh mục'
+                  />
+                )}
+              />
+              <Autocomplete
+                id='tags-outlined'
+                options={subCategories}
+                getOptionLabel={(option) => option.name}
+                value={subCategory}
+                onChange={(event, newValue) => {
+                  console.log(newValue);
+                  setSubCategory(newValue);
                 }}
                 filterSelectedOptions
                 renderInput={(params) => (
@@ -140,6 +205,13 @@ const AddProductForm = () => {
                     placeholder='Danh mục'
                   />
                 )}
+              />
+              <TextField
+                required
+                id='describe'
+                label='Mô tả'
+                value={describe}
+                onChange={(e) => setDescribe(e.target.value)}
               />
               <Stack spacing={1}>
                 <Typography variant='body2'>Chọn hình ảnh</Typography>

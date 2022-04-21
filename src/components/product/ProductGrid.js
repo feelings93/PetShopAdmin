@@ -63,7 +63,7 @@ const ProductGrid = () => {
       editable: false,
     },
     {
-      field: 'categories',
+      field: 'category',
       headerName: 'Danh mục',
       sortable: false,
       width: 200,
@@ -71,32 +71,31 @@ const ProductGrid = () => {
       renderCell: (params) => {
         return (
           <Stack spacing={1}>
-            {params.row.categories.map((x) => (
-              <Chip key={x.id} label={x.name} />
-            ))}
+            <Chip
+              key={params.row.category.id}
+              label={params.row.category.name}
+            />
           </Stack>
         );
       },
     },
-    // {
-    //   field: 'action',
-    //   sortable: false,
-    //   headerName: 'Thao tác',
-    //   width: 200,
-    //   editable: false,
-    //   renderCell: (params) => {
-    //     return (
-    //       <Stack direction='row'>
-    //         <IconButton onClick={partial(handleChangeEditProduct, params.row)}>
-    //           <Edit color='primary' />
-    //         </IconButton>
-    //         {/* <IconButton onClick={partial(handleChangeDelProduct, params.row)}>
-    //           <Delete />
-    //         </IconButton> */}
-    //       </Stack>
-    //     );
-    //   },
-    // },
+    {
+      field: 'subCategory',
+      headerName: 'Danh mục phụ',
+      sortable: false,
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        return (
+          <Stack spacing={1}>
+            <Chip
+              key={params.row.subCategory.id}
+              label={params.row.subCategory.name}
+            />
+          </Stack>
+        );
+      },
+    },
   ];
 
   return (

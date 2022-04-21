@@ -30,12 +30,9 @@ export const createProduct = async (Product) => {
   formData.append('price', Product.price);
   formData.append('quantity', Product.quantity);
   formData.append('describe', Product.describe);
-  for (let i = 0; i < Product.selectedCategories.length; i++) {
-    formData.append(
-      'selectedCategories[]',
-      JSON.stringify(Product.selectedCategories[i])
-    );
-  }
+  formData.append('categoryId', Product.category?.id);
+  formData.append('subCategoryId', Product.subCategory?.id);
+
   for (let i = 0; i < Product.files.length; i++) {
     formData.append('files', Product.files[i]);
   }
@@ -59,15 +56,13 @@ export const editProduct = async (Product) => {
   if (Product.name) formData.append('name', Product.name);
   if (Product.price) formData.append('price', Product.price);
   if (Product.quantity) formData.append('quantity', Product.quantity);
+  if (Product.category) formData.append('categoryId', Product.category?.id);
+  if (Product.subCategory)
+    formData.append('subCategoryId', Product.subCategory?.id);
+
   if (Product.describe) formData.append('describe', Product.describe);
   for (let i = 0; i < Product.photoUrls.length; i++) {
-    formData.append('photoUrls[]', JSON.stringify(Product.photoUrls[i]));
-  }
-  for (let i = 0; i < Product.selectedCategories.length; i++) {
-    formData.append(
-      'selectedCategories[]',
-      JSON.stringify(Product.selectedCategories[i])
-    );
+    formData.append('photoUrls', JSON.stringify(Product.photoUrls[i]));
   }
   for (let i = 0; i < Product.files.length; i++) {
     if (Product.files[i]) formData.append('files', Product.files[i]);

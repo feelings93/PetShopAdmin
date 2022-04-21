@@ -88,7 +88,7 @@ const ProductDetailImages = ({ images, onAdd, onDelete, edit }) => {
                 src={x}
                 width='100%'
                 height='100%'
-                alt='image product'
+                alt='product'
               />
             </Box>
           </Grid>

@@ -42,13 +42,13 @@ const AddPetTypeForm = () => {
   }, [data, status, error, handleAddPetType, handleCloseAdd]);
   return (
     <Dialog open={openAdd}>
-        {status === 'pending' && <LinearProgress />}
+      {status === 'pending' && <LinearProgress />}
       <form onSubmit={handleSubmit}>
         <DialogTitle>Thêm loại thú cưng</DialogTitle>
         <DialogContent>
           <Stack mt={1} spacing={2}>
             <TextField
-            required
+              required
               id='name'
               label='Tên loại thú cưng'
               value={name}
@@ -57,8 +57,12 @@ const AddPetTypeForm = () => {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button variant='contained' type='submit'>
-            Thêm
+          <Button
+            disabled={status === 'pending'}
+            variant='contained'
+            type='submit'
+          >
+            {status === 'pending' ? 'Đang thêm...' : 'Thêm'}
           </Button>
           <Button variant='text' onClick={handleCloseAdd}>
             Hủy bỏ

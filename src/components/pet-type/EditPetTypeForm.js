@@ -50,7 +50,7 @@ const EditPetTypeForm = () => {
           <Stack mt={1} spacing={2}>
             <TextField id='id' label='Id' disabled value={editPetTypeObj.id} />
             <TextField
-            required
+              required
               id='name'
               label='Tên loại thú cưng'
               value={name}
@@ -64,7 +64,7 @@ const EditPetTypeForm = () => {
             variant='contained'
             type='submit'
           >
-            Cập nhật
+            {status === 'pending' ? 'Đang lưu.' : 'Cập nhật'}
           </Button>
           <Button variant='text' onClick={handleCloseEdit}>
             Hủy bỏ

@@ -116,7 +116,7 @@ const EditProductForm = () => {
               variant='contained'
               type='submit'
             >
-              Cập nhật
+              {status === 'pending' ? "Đang lưu..." : "Cập nhật"}
             </Button>
             <Button variant='text' onClick={handleCloseEdit}>
               Hủy bỏ

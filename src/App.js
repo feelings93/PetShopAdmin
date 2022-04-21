@@ -27,6 +27,8 @@ import SubCategory from './pages/SubCategory';
 import Employee from './pages/Employee';
 import EmployeeContextProvider from './store/employee-context';
 import { useAuth } from './hooks/use-auth';
+import PetContextProvider from './store/pet-context';
+import Pet from './pages/Pet';
 
 const theme = createTheme({
   palette: {
@@ -145,6 +147,14 @@ function App() {
                 <EmployeeContextProvider>
                   <Employee />
                 </EmployeeContextProvider>
+              }
+            />
+            <Route
+              path='pet'
+              element={
+                <PetContextProvider>
+                  <Pet />
+                </PetContextProvider>
               }
             />
             <Route path='*' element={<NotFound />} />

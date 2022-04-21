@@ -53,8 +53,12 @@ const AddCategoryForm = () => {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button variant='contained' type='submit'>
-            Thêm
+          <Button
+            disabled={status === 'pending'}
+            variant='contained'
+            type='submit'
+          >
+            {status === 'pending' ? 'Đang thêm...' : 'Thêm'}
           </Button>
           <Button variant='text' onClick={handleCloseAdd}>
             Hủy bỏ

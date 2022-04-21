@@ -5,31 +5,25 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import Search from '@mui/icons-material/Search';
-import { ProductContext } from '../store/product-context';
-import { getProducts } from '../lib/api/product';
-import AddProductForm from '../components/product/AddProductForm';
+import AddPetForm from '../components/pet/AddPetForm';
+import { getPets } from '../lib/api/pet';
 import useHttp from '../hooks/use-http';
-import ProductGrid from '../components/product/ProductGrid';
+import PetGrid from '../components/pet/PetGrid';
+import { PetContext } from '../store/pet-context';
 
-const Product = () => {
-  const { data, error, status, sendRequest } = useHttp(getProducts, true);
-  const productCtx = useContext(ProductContext);
-  const {
-    setProducts,
-    openAdd,
-    handleOpenAdd,
-    query,
-    setQuery,
-  } = productCtx;
+const Pet = () => {
+  const { data, error, status, sendRequest } = useHttp(getPets, true);
+  const petCtx = useContext(PetContext);
+  const { setPets, openAdd, handleOpenAdd, query, setQuery } = petCtx;
   React.useEffect(() => {
     sendRequest();
   }, [sendRequest]);
 
   React.useEffect(() => {
     if (status === 'completed' && data) {
-      setProducts(data);
+      setPets(data);
     }
-  }, [data, status, setProducts]);
+  }, [data, status, setPets]);
 
   if (status === 'pending') return <h1>Loading...</h1>;
   if (error) return <h1>Đã có lỗi xảy ra</h1>;
@@ -41,7 +35,7 @@ const Product = () => {
         alignItems='center'
         direction='row'
       >
-        <Typography>Sản phẩm</Typography>
+        <Typography>Thú cưng</Typography>
         <Stack spacing={1} alignItems='center' direction='row'>
           <TextField
             size='small'
@@ -69,10 +63,10 @@ const Product = () => {
           </Button>
         </Stack>
       </Stack>
-      <ProductGrid />
-      {openAdd && <AddProductForm />}
+      <PetGrid />
+      {openAdd && <AddPetForm />}
     </>
   );
 };
 
-export default Product;
+export default Pet;

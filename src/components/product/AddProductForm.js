@@ -8,10 +8,10 @@ import DialogActions from '@mui/material/DialogActions';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
+import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
-import LinearProgress from '@mui/material/LinearProgress';
 import useHttp from '../../hooks/use-http';
 import { ProductContext } from '../../store/product-context';
 import { createProduct } from '../../lib/api/product';
@@ -220,8 +220,12 @@ const AddProductForm = () => {
             </Stack>
           </DialogContent>
           <DialogActions>
-            <Button variant='contained' type='submit'>
-              Thêm
+            <Button
+              disabled={status === 'pending'}
+              variant='contained'
+              type='submit'
+            >
+              {status === 'pending' ? 'Đang thêm...' : 'Thêm'}
             </Button>
             <Button variant='text' onClick={handleCloseAdd}>
               Hủy bỏ

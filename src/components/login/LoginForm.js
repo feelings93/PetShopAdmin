@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -11,15 +11,13 @@ import {
   RemoveRedEye,
   VisibilityOff,
 } from '@mui/icons-material';
+
 import swal from 'sweetalert';
 import useHttp from '../../hooks/use-http';
 import { login } from '../../lib/api/auth';
 import { useForm } from 'react-hook-form';
-import { AuthContext } from '../../store/auth-context';
 
 const LoginForm = () => {
-  const authCtx = useContext(AuthContext);
-  const { setUser } = authCtx;
   const { data, error, status, sendRequest } = useHttp(login);
   const { handleSubmit, register } = useForm();
   const [isShowPass, setIsShowPass] = React.useState(false);
@@ -36,12 +34,12 @@ const LoginForm = () => {
       if (!error) {
         console.log(data);
         window.localStorage.setItem('accessToken', data.accessToken);
-        setUser(data.user);
+        window.location.reload();
       } else {
         swal('Đã có lỗi xảy ra', error, 'error');
       }
     }
-  }, [data, error, setUser, status]);
+  }, [data, error, status]);
 
   return (
     <Box

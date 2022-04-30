@@ -32,6 +32,7 @@ import Pet from './pages/Pet';
 import PetDetail from './pages/PetDetail';
 import ServiceContextProvider from './store/service-context';
 import Service from './pages/Service';
+import ServiceDetail from './pages/ServiceDetail';
 
 const theme = createTheme({
   palette: {
@@ -168,6 +169,7 @@ function App() {
                 </ServiceContextProvider>
               }
             />
+            <Route path='service/:id' element={<ServiceDetail />} />
             <Route path='*' element={<NotFound />} />
           </Route>
         </Route>

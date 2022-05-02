@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import IconButton from '@mui/material/IconButton';
 import Chip from '@mui/material/Chip';
 import Switch from '@mui/material/Switch';
-import { Delete, Edit } from '@mui/icons-material';
+import {  Edit } from '@mui/icons-material';
 import StyleGrid from '../UI/StyleGrid/StyleGrid';
 import { UserContext } from '../../store/user-context';
 
@@ -13,8 +13,11 @@ function partial(fn, ...args) {
 
 const UserGrid = () => {
   const userCtx = useContext(UserContext);
-  const { searchUsers, handleChangeEditUser, handleChangeDelUser, handleChangeActiveUser } =
-    userCtx;
+  const {
+    searchUsers,
+    handleChangeEditUser,
+    handleChangeActiveUser,
+  } = userCtx;
   const columns = [
     {
       field: 'id',
@@ -24,6 +27,7 @@ const UserGrid = () => {
     {
       field: 'name',
       headerName: 'Họ tên',
+      valueGetter: (params) => params.row.lastName + ' ' + params.row.firstName,
       width: 200,
       editable: false,
     },
@@ -37,18 +41,6 @@ const UserGrid = () => {
       field: 'phone',
       headerName: 'SĐT',
       width: 100,
-      editable: false,
-    },
-    {
-      field: 'address',
-      headerName: 'Địa chỉ',
-      width: 200,
-      editable: false,
-    },
-    {
-      field: 'email',
-      headerName: 'Email',
-      width: 200,
       editable: false,
     },
     {

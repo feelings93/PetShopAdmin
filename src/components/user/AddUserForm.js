@@ -12,50 +12,26 @@ import Stack from '@mui/material/Stack';
 import useHttp from '../../hooks/use-http';
 import { UserContext } from '../../store/user-context';
 import { createUser } from '../../lib/api/user';
+import { useForm } from 'react-hook-form';
 
 const options = [
-  { label: 'admin', id: 1 },
-  { label: 'user', id: 2 },
+  { label: 'Admin', id: 1 },
+  { label: 'Quản lý', id: 2 },
 ];
 
 const AddUserForm = () => {
+  const { handleSubmit, register } = useForm();
   const userCtx = useContext(UserContext);
   const { handleAddUser, handleCloseAdd, openAdd } = userCtx;
   const { data, error, sendRequest, status } = useHttp(createUser);
-  const [name, setName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
-  const [phone, setPhone] = React.useState('');
-  const [address, setAddress] = React.useState('');
   const [role, setRole] = React.useState(null);
-
-  const handleChangeName = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleChangeEmail = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleChangePassword = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleChangePhone = (e) => {
-    setPhone(e.target.value);
-  };
-
-  const handleChangeAddress = (e) => {
-    setAddress(e.target.value);
-  };
 
   const handleChangeRole = (e, value) => {
     setRole(value);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    sendRequest({ name, email, password, phone, address, role: role.label });
+  const onSubmit = (data) => {
+    sendRequest({ ...data, role: role.label });
   };
 
   React.useEffect(() => {
@@ -70,32 +46,35 @@ const AddUserForm = () => {
   return (
     <Dialog open={openAdd}>
       {status === 'pending' && <LinearProgress />}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle>Thêm người dùng</DialogTitle>
         <DialogContent>
           <Stack mt={1} spacing={2}>
             <TextField
-              id='name'
-              label='Họ tên'
+              {...register('lastName')}
+              id='lastName'
+              label='Họ'
               required
-              value={name}
-              onChange={handleChangeName}
             />
             <TextField
+              {...register('firstName')}
+              id='firstName'
+              label='Tên'
+              required
+            />
+            <TextField
+              {...register('email')}
               id='email'
               label='Email'
               type='email'
               required
-              value={email}
-              onChange={handleChangeEmail}
             />
             <TextField
+              {...register('password')}
               id='password'
               type='password'
               required
               label='Password'
-              value={password}
-              onChange={handleChangePassword}
             />
             <Autocomplete
               disablePortal
@@ -109,16 +88,10 @@ const AddUserForm = () => {
               )}
             />
             <TextField
+              {...register('phone')}
               id='phone'
               label='Số điện thoại'
-              value={phone}
-              onChange={handleChangePhone}
-            />
-            <TextField
-              id='address'
-              label='Địa chỉ'
-              value={address}
-              onChange={handleChangeAddress}
+              required
             />
           </Stack>
         </DialogContent>

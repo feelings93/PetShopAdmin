@@ -2,7 +2,7 @@ import { axios, bearerHeader } from '../config';
 
 export const getUsers = async () => {
   try {
-    const response = await axios.get('/users', {
+    const response = await axios.get('/admin-users', {
         headers: {
             Authorization: bearerHeader,
           },
@@ -15,7 +15,7 @@ export const getUsers = async () => {
 
 export const getUser = async (id) => {
   try {
-    const response = await axios.get(`/users/${id}`);
+    const response = await axios.get(`/admin-users/${id}`);
     return response.data;
   } catch (err) {
     throw new Error(err);
@@ -24,7 +24,7 @@ export const getUser = async (id) => {
 
 export const createUser = async (user) => {
   try {
-    const response = await axios.post(`/users`, user, {
+    const response = await axios.post(`/admin-users`, user, {
       headers: {
         Authorization: bearerHeader,
       },
@@ -37,7 +37,7 @@ export const createUser = async (user) => {
 
 export const editUser = async (user) => {
   try {
-    const response = await axios.patch(`/users/${user.id}`, user, {
+    const response = await axios.patch(`/admin-users/${user.id}`, user, {
       headers: {
         Authorization: bearerHeader,
       },
@@ -50,7 +50,7 @@ export const editUser = async (user) => {
 
 export const delUser = async (user) => {
     try {
-      const response = await axios.delete(`/users/${user.id}`, user, {
+      const response = await axios.delete(`/admin-users/${user.id}`, user, {
         headers: {
           Authorization: bearerHeader,
         },

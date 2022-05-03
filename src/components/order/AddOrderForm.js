@@ -15,6 +15,9 @@ import { createOrder } from '../../lib/api/order';
 import ProductTable from './ProductTable';
 import { AddCircle } from '@mui/icons-material';
 import provinces from '../../utils/nested-divisions.json';
+import { useForm } from 'react-hook-form';
+import PetTable from './PetTable';
+import ServiceTable from './ServiceTable';
 
 const paymentTypes = [
   {
@@ -27,31 +30,50 @@ const paymentTypes = [
   },
 ];
 
-const AddOrderForm = () => {
-  const orderCtx = useContext(OrderContext);
-  const { handleAddOrder, handleCloseAdd, openAdd, products } = orderCtx;
-  const { data, error, sendRequest, status } = useHttp(createOrder);
+const orderTypes = [
+  {
+    id: 1,
+    label: 'Online',
+  },
+  {
+    id: 2,
+    label: 'Offline',
+  },
+];
 
-  const [customerName, setCustomerName] = React.useState('');
+const AddOrderForm = () => {
+  const { handleSubmit, register } = useForm();
+  const orderCtx = useContext(OrderContext);
+  const { handleAddOrder, handleCloseAdd, openAdd, products, pets, services } =
+    orderCtx;
+  const { data, error, sendRequest, status } = useHttp(createOrder);
+  const [orderType, setOrderType] = React.useState(null);
   const [paymentType, setPaymentType] = React.useState(null);
   const [product, setProduct] = React.useState(null);
+  const [pet, setPet] = React.useState(null);
+  const [service, setService] = React.useState(null);
+  const [employee, setEmployee] = React.useState(null);
   const [quantity, setQuantity] = React.useState('');
-
   const [selectedProducts, setSelectedProducts] = React.useState([]);
+  const [selectedPets, setSelectedPets] = React.useState([]);
+  const [selectedServices, setSelectedServices] = React.useState([]);
 
   const [province, setProvince] = React.useState(null);
   const [districts, setDistricts] = React.useState([]);
   const [district, setDistrict] = React.useState(null);
-  const [phone, setPhone] = React.useState('');
-  const [address, setAddress] = React.useState('');
-  const [note, setNote] = React.useState('');
+  const [communes, setCommunes] = React.useState([]);
+  const [commune, setCommune] = React.useState(null);
 
-  const handleChangeCustomerName = (e) => {
-    setCustomerName(e.target.value);
+  const handleChangeOrderType = (e, value) => {
+    setOrderType(value);
   };
 
   const handleChangePaymentType = (e, value) => {
     setPaymentType(value);
+  };
+
+  const handleChangePet = (e, value) => {
+    setPet(value);
   };
 
   const handleChangeProduct = (e, value) => {
@@ -59,18 +81,27 @@ const AddOrderForm = () => {
     setQuantity('');
   };
 
+  const handleChangeService = (e, value) => {
+    setService(value);
+    setEmployee(null);
+  };
+
   const handleChangeProvince = (e, value) => {
     setProvince(value);
     setDistricts(value?.districts || []);
     setDistrict(null);
+    setCommunes([]);
+    setCommune(null);
   };
 
   const handleChangeDistrict = (e, value) => {
     setDistrict(value);
+    setCommunes(value?.wards || []);
+    setCommune(null);
   };
 
-  const handleChangeAddress = (e) => {
-    setAddress(e.target.value);
+  const handleChangeCommune = (e, value) => {
+    setCommune(value);
   };
 
   const handleChangeQuantity = (e) => {
@@ -86,12 +117,54 @@ const AddOrderForm = () => {
       setQuantity(quantity);
   };
 
-  const handleChangeNote = (e) => {
-    setNote(e.target.value);
+  const handleAddPet = () => {
+    if (!pet) {
+      swal('Lỗi', 'Vui lòng nhập đầy đủ thông tin thú cưng');
+      return;
+    }
+    const petAdd = selectedPets.find((x) => x.petId === pet.id);
+    if (petAdd) {
+      swal('Lỗi', 'Thú cưng này đã được thêm rồi!');
+      return;
+    } else
+      setSelectedPets((prev) => [
+        ...prev,
+        {
+          petId: pet.id,
+          name: pet.name,
+          price: pet.price,
+        },
+      ]);
+    setPet(null);
   };
 
-  const handleChangePhone = (e) => {
-    setPhone(e.target.value);
+  const handleDeletePet = (id) => {
+    const newPets = selectedPets.filter((x) => x.petId !== id);
+    setSelectedPets(newPets);
+  };
+
+  const handleAddService = () => {
+    if (!service || !employee) {
+      swal('Lỗi', 'Vui lòng nhập đầy đủ thông tin dịch vụ');
+      return;
+    }
+
+    setSelectedServices((prev) => [
+      ...prev,
+      {
+        serviceId: service.id,
+        name: service.name,
+        price: service.price,
+        employee: employee,
+      },
+    ]);
+    setService(null);
+    setEmployee(null);
+  };
+
+  const handleDeleteService = (id) => {
+    const newServices = selectedServices.filter((x) => x.petId !== id);
+    setSelectedServices(newServices);
   };
 
   const handleAddProduct = () => {
@@ -127,17 +200,29 @@ const AddOrderForm = () => {
     setSelectedProducts(newProducts);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
+    if (
+      selectedPets.length === 0 &&
+      selectedServices.length === 0 &&
+      selectedProducts.length === 0
+    )
+      swal('Lỗi', 'Vui lòng chọn mặt hàng!');
     sendRequest({
-      customerName,
+      orderType: orderType.label,
       paymentType: paymentType.label,
-      products: selectedProducts,
+      products: selectedProducts.map((x) => ({
+        id: x.productId,
+        quantity: x.quantity,
+      })),
+      pets: selectedPets.map((x) => ({ id: x.petId })),
+      services: selectedServices.map((x) => ({
+        id: x.serviceId,
+        doneBy: x.employee.id,
+      })),
       province: province.name,
       district: district.name,
-      address,
-      phone,
-      note,
+      commune: commune.name,
+      ...data,
     });
   };
 
@@ -152,7 +237,7 @@ const AddOrderForm = () => {
   }, [data, status, error, handleAddOrder, handleCloseAdd]);
   return (
     <Dialog open={openAdd}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle>Thêm đơn hàng</DialogTitle>
         <DialogContent>
           <Stack mt={1} spacing={2}>
@@ -160,8 +245,7 @@ const AddOrderForm = () => {
               required
               id='name'
               label='Tên khách hàng'
-              value={customerName}
-              onChange={handleChangeCustomerName}
+              {...register('customerName')}
             />
             {selectedProducts.length > 0 && (
               <ProductTable
@@ -169,6 +253,37 @@ const AddOrderForm = () => {
                 onDelete={handleDeleteProduct}
               />
             )}
+            {selectedPets.length > 0 && (
+              <PetTable pets={selectedPets} onDelete={handleDeletePet} />
+            )}
+            {selectedServices.length > 0 && (
+              <ServiceTable
+                services={selectedServices}
+                onDelete={handleDeleteService}
+              />
+            )}
+            <Stack spacing={1} direction='row'>
+              <Autocomplete
+                sx={{ width: '450px' }}
+                id='product'
+                getOptionLabel={(option) =>
+                  'Id: ' + option.id + ' | ' + option.name
+                }
+                onChange={handleChangePet}
+                value={pet}
+                options={pets}
+                renderInput={(params) => (
+                  <TextField
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...params}
+                    label='Thú cưng'
+                  />
+                )}
+              />
+              <IconButton onClick={handleAddPet} color='primary'>
+                <AddCircle />
+              </IconButton>
+            </Stack>
             <Stack spacing={1} direction='row'>
               <Autocomplete
                 sx={{ width: '450px' }}
@@ -203,6 +318,68 @@ const AddOrderForm = () => {
                 <AddCircle />
               </IconButton>
             </Stack>
+            <Stack spacing={1} direction='row'>
+              <Autocomplete
+                sx={{ width: '450px' }}
+                id='product'
+                getOptionLabel={(option) =>
+                  'Id: ' + option.id + ' | ' + option.name
+                }
+                onChange={handleChangeService}
+                value={service}
+                options={services}
+                renderInput={(params) => (
+                  <TextField
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...params}
+                    label='Dịch vụ'
+                  />
+                )}
+              />
+              <Autocomplete
+                sx={{ width: '450px' }}
+                id='employee'
+                getOptionLabel={(option) =>
+                  'Id: ' +
+                  option.id +
+                  ' | ' +
+                  option.lastName +
+                  ' ' +
+                  option.firstName
+                }
+                onChange={(e, value) => setEmployee(value)}
+                value={employee}
+                options={
+                  service?.employeeToServices
+                    ? service?.employeeToServices.map((x) => x.employee)
+                    : []
+                }
+                renderInput={(params) => (
+                  <TextField
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...params}
+                    label='Nhân viên thực hiện'
+                  />
+                )}
+              />
+              <IconButton onClick={handleAddService} color='primary'>
+                <AddCircle />
+              </IconButton>
+            </Stack>
+            <Autocomplete
+              id='orderType'
+              getOptionLabel={(option) => option.label}
+              onChange={handleChangeOrderType}
+              value={orderType}
+              options={orderTypes}
+              renderInput={(params) => (
+                <TextField
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...params}
+                  label='Kiểu đơn hàng'
+                />
+              )}
+            />
             <Autocomplete
               id='paymentType'
               getOptionLabel={(option) => option.label}
@@ -231,6 +408,7 @@ const AddOrderForm = () => {
                 />
               )}
             />
+
             <Autocomplete
               id='district'
               getOptionLabel={(option) => option.name}
@@ -245,26 +423,37 @@ const AddOrderForm = () => {
                 />
               )}
             />
+            <Autocomplete
+              id='commune'
+              getOptionLabel={(option) => option.name}
+              onChange={handleChangeCommune}
+              value={commune}
+              options={communes}
+              renderInput={(params) => (
+                <TextField
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...params}
+                  label='Phường, xã'
+                />
+              )}
+            />
             <TextField
               required
               id='address'
               label='Địa chỉ'
-              value={address}
-              onChange={handleChangeAddress}
+              {...register('detailAddress')}
             />
             <TextField
               required
               id='phone'
               label='Số điện thoại'
-              value={phone}
-              onChange={handleChangePhone}
+              {...register('phone')}
             />
             <TextField
               required
               id='note'
               label='Ghi chú'
-              value={note}
-              onChange={handleChangeNote}
+              {...register('note')}
             />
           </Stack>
         </DialogContent>

@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 export const OrderContext = React.createContext({
   orders: [],
   products: [],
+  pets: [],
+  services: [],
   setProducts: () => {},
+  setPets: () => {},
+  setServices: () => {},
   query: '',
   setQuery: () => {},
   searchOrders: [],
@@ -27,7 +31,8 @@ const OrderContextProvider = (props) => {
   const { children } = props;
   const [orders, setOrders] = useState([]);
   const [products, setProducts] = useState([]);
-
+  const [pets, setPets] = useState([]);
+  const [services, setServices] = useState([]);
   const [searchOrders, setSearchOrders] = React.useState([]);
   const [query, setQuery] = React.useState('');
   const [openAdd, setOpenAdd] = React.useState(false);
@@ -97,7 +102,11 @@ const OrderContextProvider = (props) => {
       orders,
       setOrders,
       products,
+      pets,
+      services,
       setProducts,
+      setPets,
+      setServices,
       query,
       setQuery,
       searchOrders,
@@ -118,6 +127,8 @@ const OrderContextProvider = (props) => {
     [
       orders,
       products,
+      pets,
+      services,
       editOrder,
       query,
       setQuery,

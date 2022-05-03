@@ -24,6 +24,12 @@ const OrderGrid = () => {
       editable: false,
     },
     {
+      field: 'phone',
+      headerName: 'SĐT',
+      width: 120,
+      editable: false,
+    },
+    {
       field: 'total',
       headerName: 'Tổng cộng',
       width: 150,
@@ -65,7 +71,7 @@ const OrderGrid = () => {
           <Chip variant={variant} color={color} label={params.row?.status} />
         );
       },
-      width: 200,
+      width: 150,
       editable: false,
     },
     {
@@ -75,9 +81,21 @@ const OrderGrid = () => {
       editable: false,
     },
     {
-      field: 'address',
-      headerName: 'Địa chỉ',
+      field: 'paymentStatus',
+      headerName: 'Tình trạng thanh toán',
       width: 200,
+      editable: false,
+    },
+    {
+      field: 'detailAddress',
+      headerName: 'Địa chỉ',
+      width: 100,
+      editable: false,
+    },
+    {
+      field: 'commune',
+      headerName: 'Phường, xã',
+      width: 120,
       editable: false,
     },
     {

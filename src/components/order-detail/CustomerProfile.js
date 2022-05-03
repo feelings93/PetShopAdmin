@@ -4,6 +4,7 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
+import Autocomplete from '@mui/material/Autocomplete';
 import Divider from '@mui/material/Divider';
 import LinearProgress from '@mui/material/LinearProgress';
 import useHttp from '../../hooks/use-http';
@@ -13,13 +14,50 @@ import { editOrder } from '../../lib/api/order';
 import { useForm } from 'react-hook-form';
 import PropTypes from 'prop-types';
 import swal from 'sweetalert';
+import provinces from '../../utils/nested-divisions.json';
 
 const CustomerProfile = ({ order }) => {
   const { sendRequest, data, status, error } = useHttp(editOrder);
   const [edit, setEdit] = useState(false);
+  const [province, setProvince] = useState(
+    provinces.find((x) => x.name === order.province)
+  );
+  const [district, setDistrict] = useState(
+    provinces
+      .find((x) => x.name === order.province)
+      .districts.find((x) => x.name === order.district)
+  );
+  const [commune, setCommune] = useState(
+    provinces
+      .find((x) => x.name === order.province)
+      .districts.find((x) => x.name === order.district)
+      .wards.find((x) => x.name === order.commune)
+  );
   const { register, handleSubmit } = useForm();
+
+  const handleChangeProvince = (e, value) => {
+    setProvince(value);
+    setDistrict(null);
+    setCommune(null);
+  };
+
+  const handleChangeDistrict = (e, value) => {
+    setDistrict(value);
+    setCommune(null);
+  };
+
+  const handleChangeCommune = (e, value) => {
+    setCommune(value);
+  };
+
   const onSubmit = (data) => {
-    sendRequest({ id: order.id, ...data });
+    sendRequest({
+      id: order.id,
+      ...data,
+      province: province.name,
+      district: district.name,
+      commune: commune.name,
+    });
   };
   useEffect(() => {
     const showSuccessMsg = async () => {
@@ -81,6 +119,7 @@ const CustomerProfile = ({ order }) => {
                 disabled={!edit}
                 defaultValue={order?.customerName}
                 {...register('customerName')}
+                required
                 fullWidth
                 size='small'
               />
@@ -93,8 +132,78 @@ const CustomerProfile = ({ order }) => {
                 disabled={!edit}
                 defaultValue={order?.phone}
                 {...register('phone')}
+                required
                 fullWidth
                 size='small'
+              />
+            </Stack>
+            <Stack direction='row' justifyContent='space-between'>
+              <Typography width='200px' variant='subtitle1'>
+                Tỉnh, thành
+              </Typography>
+              <Autocomplete
+                disabled={!edit}
+                id='province'
+                getOptionLabel={(option) => option.name}
+                onChange={handleChangeProvince}
+                value={province}
+                fullWidth
+                options={provinces}
+                renderInput={(params) => (
+                  <TextField
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...params}
+                    label='Tỉnh, thành'
+                    size='small'
+                    required
+                  />
+                )}
+              />
+            </Stack>
+            <Stack direction='row' justifyContent='space-between'>
+              <Typography width='200px' variant='subtitle1'>
+                Quận, huyện
+              </Typography>
+              <Autocomplete
+                id='district'
+                disabled={!edit}
+                fullWidth
+                getOptionLabel={(option) => option.name}
+                onChange={handleChangeDistrict}
+                value={district}
+                options={province?.districts || []}
+                renderInput={(params) => (
+                  <TextField
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...params}
+                    label='Quận, huyện'
+                    required
+                    size='small'
+                  />
+                )}
+              />
+            </Stack>
+            <Stack direction='row' justifyContent='space-between'>
+              <Typography width='200px' variant='subtitle1'>
+                Phường, xã
+              </Typography>
+              <Autocomplete
+                id='commune'
+                disabled={!edit}
+                getOptionLabel={(option) => option.name}
+                onChange={handleChangeCommune}
+                value={commune}
+                fullWidth
+                options={district?.wards || []}
+                renderInput={(params) => (
+                  <TextField
+                    // eslint-disable-next-line react/jsx-props-no-spreading
+                    {...params}
+                    label='Phường, xã'
+                    required
+                    size='small'
+                  />
+                )}
               />
             </Stack>
             <Stack direction='row' justifyContent='space-between'>
@@ -103,8 +212,9 @@ const CustomerProfile = ({ order }) => {
               </Typography>
               <TextField
                 disabled={!edit}
-                defaultValue={order?.address}
-                {...register('address')}
+                defaultValue={order?.detailAddress}
+                {...register('detailAddress')}
+                required
                 fullWidth
                 size='small'
               />

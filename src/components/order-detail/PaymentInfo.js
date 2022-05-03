@@ -27,21 +27,41 @@ const paymentTypes = [
   },
 ];
 
+const paymentStatuses = [
+  {
+    id: 1,
+    label: 'Chưa thanh toán',
+  },
+  {
+    id: 2,
+    label: 'Đã thanh toán',
+  },
+];
+
 const PaymentInfo = ({ order }) => {
   const { sendRequest, data, status, error } = useHttp(editOrder);
   const [paymentType, setPaymentType] = React.useState(
     paymentTypes.find((x) => x.label === order.paymentType)
   );
+  const [paymentStatus, setPaymentStatus] = React.useState(
+    paymentStatuses.find((x) => x.label === order.paymentStatus)
+  );
 
   const [edit, setEdit] = useState(false);
   const { handleSubmit } = useForm();
   const onSubmit = () => {
-    console.log({ id: order.id, paymentType: paymentType.label });
-    sendRequest({ id: order.id, paymentType: paymentType.label });
+    sendRequest({
+      id: order.id,
+      paymentType: paymentType.label,
+      paymentStatus: paymentStatus.label,
+    });
   };
 
   const handleChangePaymentType = (e, value) => {
     setPaymentType(value);
+  };
+  const handleChangePaymentStatus = (e, value) => {
+    setPaymentStatus(value);
   };
   useEffect(() => {
     const showSuccessMsg = async () => {
@@ -111,6 +131,27 @@ const PaymentInfo = ({ order }) => {
                   {...params}
                   size='small'
                   label='Phương thức thanh toán'
+                />
+              )}
+            />
+          </Stack>
+          <Stack direction='row' justifyContent='space-between'>
+            <Typography variant='subtitle1'>Tình trạng thanh toán</Typography>
+
+            <Autocomplete
+              value={paymentStatus}
+              onChange={handleChangePaymentStatus}
+              disabled={!edit}
+              fullWidth
+              id='paymentStatus'
+              getOptionLabel={(option) => option.label}
+              options={paymentStatuses}
+              renderInput={(params) => (
+                <TextField
+                  // eslint-disable-next-line react/jsx-props-no-spreading
+                  {...params}
+                  size='small'
+                  label='Tình trạng thanh toán'
                 />
               )}
             />

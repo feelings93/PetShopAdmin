@@ -53,6 +53,7 @@ const AddOrderForm = () => {
   const [pet, setPet] = React.useState(null);
   const [service, setService] = React.useState(null);
   const [employee, setEmployee] = React.useState(null);
+  // const [customer, setCustomer] = React.useState(null);
   const [quantity, setQuantity] = React.useState('');
   const [selectedProducts, setSelectedProducts] = React.useState([]);
   const [selectedPets, setSelectedPets] = React.useState([]);
@@ -85,6 +86,10 @@ const AddOrderForm = () => {
     setService(value);
     setEmployee(null);
   };
+
+  // const handleChangeCustomer = (e, value) => {
+  //   setCustomer(value);
+  // };
 
   const handleChangeProvince = (e, value) => {
     setProvince(value);
@@ -207,23 +212,25 @@ const AddOrderForm = () => {
       selectedProducts.length === 0
     )
       swal('Lỗi', 'Vui lòng chọn mặt hàng!');
-    sendRequest({
-      orderType: orderType.label,
-      paymentType: paymentType.label,
-      products: selectedProducts.map((x) => ({
-        id: x.productId,
-        quantity: x.quantity,
-      })),
-      pets: selectedPets.map((x) => ({ id: x.petId })),
-      services: selectedServices.map((x) => ({
-        id: x.serviceId,
-        doneBy: x.employee.id,
-      })),
-      province: province.name,
-      district: district.name,
-      commune: commune.name,
-      ...data,
-    });
+    else {
+      sendRequest({
+        orderType: orderType.label,
+        paymentType: paymentType.label,
+        products: selectedProducts.map((x) => ({
+          id: x.productId,
+          quantity: x.quantity,
+        })),
+        pets: selectedPets.map((x) => ({ id: x.petId })),
+        services: selectedServices.map((x) => ({
+          id: x.serviceId,
+          doneBy: x.employee.id,
+        })),
+        province: province.name,
+        district: district.name,
+        commune: commune.name,
+        ...data,
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -246,6 +253,13 @@ const AddOrderForm = () => {
               id='name'
               label='Tên khách hàng'
               {...register('customerName')}
+            />
+            <TextField
+              required
+              id='email'
+              label='Email'
+              type='email'
+              {...register('email')}
             />
             {selectedProducts.length > 0 && (
               <ProductTable

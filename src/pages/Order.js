@@ -13,6 +13,7 @@ import { getServices } from '../lib/api/service';
 import { OrderContext } from '../store/order-context';
 import OrderGrid from '../components/order/OrderGrid';
 import AddOrderForm from '../components/order/AddOrderForm';
+import { getCustomers } from '../lib/api/customer';
 
 const Order = () => {
   const { data, status, sendRequest, error } = useHttp(getOrders);
@@ -34,8 +35,14 @@ const Order = () => {
     sendRequest: sendRequestServices,
     status: statusServices,
   } = useHttp(getServices, true);
+  const {
+    data: dataCustomers,
+    error: errorCustomers,
+    sendRequest: sendRequestCustomers,
+    status: statusCustomers,
+  } = useHttp(getCustomers, true);
   const orderCtx = useContext(OrderContext);
-  const { query, setQuery, handleOpenAdd, setOrders, openAdd, setProducts, setPets, setServices } =
+  const { query, setQuery, handleOpenAdd, setOrders, openAdd, setProducts, setPets, setServices, setCustomers } =
     orderCtx;
 
   React.useEffect(() => {
@@ -43,7 +50,8 @@ const Order = () => {
     sendRequestProducts();
     sendRequestPets();
     sendRequestServices();
-  }, [sendRequest, sendRequestPets, sendRequestProducts, sendRequestServices]);
+    sendRequestCustomers();
+  }, [sendRequest, sendRequestCustomers, sendRequestPets, sendRequestProducts, sendRequestServices]);
 
   React.useEffect(() => {
     if (status === 'completed' && data) {
@@ -58,22 +66,24 @@ const Order = () => {
       statusPets === 'completed' &&
       dataPets &&
       statusServices === 'completed' &&
-      dataServices
+      dataServices && statusCustomers === 'completed' &&
+      dataCustomers
     ) {
       setProducts(dataProducts);
       setPets(dataPets);
       setServices(dataServices);
+      setCustomers(dataCustomers);
     }
-  }, [dataProducts, statusProducts, setProducts, statusPets, dataPets, statusServices, dataServices, setPets, setServices]);
+  }, [dataProducts, statusProducts, setProducts, statusPets, dataPets, statusServices, dataServices, setPets, setServices, statusCustomers, dataCustomers, setCustomers]);
 
   if (
     status === 'pending' ||
     statusProducts === 'pending' ||
     statusPets === 'pending' ||
-    statusServices === 'pending'
+    statusServices === 'pending' || statusCustomers === 'pending'
   )
     return <h1>Loading...</h1>;
-  if (error || errorProducts || errorPets || errorServices)
+  if (error || errorProducts || errorPets || errorServices || errorCustomers)
     return <h1>Đã có lỗi xảy ra</h1>;
 
   return (

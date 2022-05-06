@@ -6,9 +6,11 @@ export const OrderContext = React.createContext({
   products: [],
   pets: [],
   services: [],
+  customers: [],
   setProducts: () => {},
   setPets: () => {},
   setServices: () => {},
+  setCustomers: [],
   query: '',
   setQuery: () => {},
   searchOrders: [],
@@ -33,6 +35,7 @@ const OrderContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [pets, setPets] = useState([]);
   const [services, setServices] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const [searchOrders, setSearchOrders] = React.useState([]);
   const [query, setQuery] = React.useState('');
   const [openAdd, setOpenAdd] = React.useState(false);
@@ -104,9 +107,11 @@ const OrderContextProvider = (props) => {
       products,
       pets,
       services,
+      customers,
       setProducts,
       setPets,
       setServices,
+      setCustomers,
       query,
       setQuery,
       searchOrders,
@@ -129,22 +134,22 @@ const OrderContextProvider = (props) => {
       products,
       pets,
       services,
-      editOrder,
+      customers,
       query,
-      setQuery,
       searchOrders,
-      handleAddOrder,
+      editOrder,
       handleChangeEditOrder,
-      handleCloseAdd,
-      handleCloseDelete,
-      handleCloseEdit,
-      handleEditOrder,
-      handleOpenAdd,
-      handleOpenDelete,
-      handleOpenEdit,
+      openEdit,
       openAdd,
       openDelete,
-      openEdit,
+      handleCloseAdd,
+      handleCloseEdit,
+      handleOpenAdd,
+      handleOpenEdit,
+      handleOpenDelete,
+      handleCloseDelete,
+      handleAddOrder,
+      handleEditOrder,
     ]
   );
 

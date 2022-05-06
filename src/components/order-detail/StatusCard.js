@@ -121,23 +121,38 @@ const StatusCard = ({ order }) => {
                     {...register('status')}
                     control={<Radio />}
                     label='Đã xác nhận'
+                    disabled={
+                      order?.status === 'Đã xác nhận' ||
+                      order?.status === 'Đã hủy'
+                    }
                   />
                   <FormControlLabel
                     {...register('status')}
                     value='Đang giao hàng'
                     control={<Radio />}
                     label='Đang giao hàng'
+                    disabled={
+                      order?.status === 'Đang giao hàng' ||
+                      order?.status === 'Đã hủy'
+                    }
                   />
                   <FormControlLabel
                     {...register('status')}
                     value='Đã giao'
                     control={<Radio />}
                     label='Đã giao'
+                    disabled={
+                      order?.status === 'Đã giao' || order?.status === 'Đã hủy'
+                    }
                   />
                   <FormControlLabel
                     value='Đã hoàn thành'
                     {...register('status')}
                     control={<Radio />}
+                    disabled={
+                      order?.status === 'Đã hoàn thành' ||
+                      order?.status === 'Đã hủy'
+                    }
                     label='Đã hoàn thành'
                   />
                   <FormControlLabel
@@ -145,6 +160,7 @@ const StatusCard = ({ order }) => {
                     value='Đã hủy'
                     control={<Radio />}
                     label='Đã hủy'
+                    disabled={order?.status === 'Đã hủy'}
                   />
                 </RadioGroup>
               </FormControl>

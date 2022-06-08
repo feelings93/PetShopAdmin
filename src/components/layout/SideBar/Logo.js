@@ -7,7 +7,7 @@ const Logo = () => {
   return (
     <Stack mb={2} px={1} spacing={2} direction='row' alignItems='center'>
       <img width={32} height={32} src={logo} alt={logo} />
-      <Typography color='#999' fontWeight={700} variant='h6'>
+      <Typography color='#fff' fontWeight={700} variant='h6'>
         PetShop
       </Typography>
     </Stack>

@@ -5,7 +5,6 @@ import Drawer from '@mui/material/Drawer';
 import PropTypes from 'prop-types';
 import { SIDEBAR_WIDTH } from '../../constants';
 import Logo from './Logo';
-import dog from '../../../assets/images/dog.svg';
 import TabList from './TabList';
 
 const SideBar = (props) => {
@@ -16,7 +15,6 @@ const SideBar = (props) => {
         <Logo />
         <TabList />
       </Stack>
-      <img src={dog} alt='dog' />
     </Stack>
   );
   return (
@@ -39,6 +37,7 @@ const SideBar = (props) => {
             width: SIDEBAR_WIDTH,
             px: 2,
             pt: 4,
+            background: '#2D333F',
           },
         }}
       >
@@ -55,6 +54,7 @@ const SideBar = (props) => {
             pt: 4,
             boxShadow: 'rgb(113 122 131 / 11%) 0px 7px 30px 0px',
             border: 'none',
+            background: '#2D333F'
           },
         }}
         open

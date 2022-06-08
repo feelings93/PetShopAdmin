@@ -3,7 +3,7 @@ import './App.css';
 import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { blue, green } from '@mui/material/colors';
+import { green } from '@mui/material/colors';
 import Login from './pages/Login';
 import MainLayout from './pages/MainLayout';
 import Product from './pages/Product';
@@ -39,7 +39,7 @@ import CustomerContextProvider from './store/customer-context';
 const theme = createTheme({
   palette: {
     primary: {
-      main: blue[500],
+      main: '#3AA3CC',
     },
     success: {
       main: green[500],
@@ -54,9 +54,9 @@ const theme = createTheme({
         {
           props: {
             variant: 'contained',
-            style: {
-              color: '#fff',
-            },
+          },
+          style: {
+            color: '#fff',
           },
         },
       ],

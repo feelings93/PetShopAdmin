@@ -12,6 +12,7 @@ import { getCategories } from '../lib/api/category';
 import CategoryGrid from '../components/category/CategoryGrid';
 import EditCategoryForm from '../components/category/EditCategoryForm';
 import { CategoryContext } from '../store/category-context';
+import LoadingBox from '../components/UI/LoadingBox';
 
 const Category = () => {
   const { data, error, status, sendRequest } = useHttp(getCategories, true);
@@ -35,7 +36,7 @@ const Category = () => {
     }
   }, [data, status, setCategories]);
 
-  if (status === 'pending') return <h1>Loading...</h1>;
+  if (status === 'pending') return <LoadingBox />;
   if (error) return <h1>Đã có lỗi xảy ra</h1>;
   return (
     <>

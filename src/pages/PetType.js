@@ -12,6 +12,7 @@ import PetTypeGrid from '../components/pet-type/PetTypeGrid';
 import EditPetTypeForm from '../components/pet-type/EditPetTypeForm';
 import { PetTypeContext } from '../store/pet-type-context';
 import { getPetTypes } from '../lib/api/pet-type';
+import LoadingBox from '../components/UI/LoadingBox';
 
 const PetType = () => {
   const { data, error, status, sendRequest } = useHttp(getPetTypes, true);
@@ -28,7 +29,7 @@ const PetType = () => {
     }
   }, [data, status, setPetTypes]);
 
-  if (status === 'pending') return <h1>Loading...</h1>;
+  if (status === 'pending') return <LoadingBox />;
   if (error) return <h1>Đã có lỗi xảy ra</h1>;
   return (
     <>

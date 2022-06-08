@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import ServiceDetailCard from '../components/service-detail/ServiceDetailCard';
+import LoadingBox from '../components/UI/LoadingBox';
 import useHttp from '../hooks/use-http';
 import { getEmployees } from '../lib/api/employee';
 import { getService } from '../lib/api/service';
@@ -19,24 +20,11 @@ const ServiceDetail = () => {
     sendRequest(params.id);
     sendEmployees();
   }, [params.id, sendEmployees, sendRequest]);
-  if (
-    status === 'pending' ||
-    statusEmployees === 'pending'
-  )
-    return <h1>Loading</h1>;
-  if (
-    !data ||
-    error ||
-    !dataEmployees ||
-    errorEmployees 
-  )
+  if (status === 'pending' || statusEmployees === 'pending')
+    return <LoadingBox />;
+  if (!data || error || !dataEmployees || errorEmployees)
     return <h1>Đã có lỗi xảy ra</h1>;
-  return (
-    <ServiceDetailCard
-    service={data}
-    employees={dataEmployees}
-    />
-  );
+  return <ServiceDetailCard service={data} employees={dataEmployees} />;
 };
 
 export default ServiceDetail;

@@ -11,6 +11,7 @@ import CustomerProfile from '../components/order-detail/CustomerProfile';
 import PaymentInfo from '../components/order-detail/PaymentInfo';
 import ProductList from '../components/order-detail/ProductList';
 import { ChevronLeft } from '@mui/icons-material';
+import LoadingBox from '../components/UI/LoadingBox';
 
 const OrderDetail = () => {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const OrderDetail = () => {
   useEffect(() => {
     sendRequest(params.id);
   }, [params.id, sendRequest]);
-  if (status === 'pending') return <h1>Loading</h1>;
+  if (status === 'pending') return <LoadingBox/>;
   if (!data || error) return <h1>Đã có lỗi xảy ra</h1>;
   return (
     <Stack spacing={4}>

@@ -10,6 +10,7 @@ import { getPets } from '../lib/api/pet';
 import useHttp from '../hooks/use-http';
 import PetGrid from '../components/pet/PetGrid';
 import { PetContext } from '../store/pet-context';
+import LoadingBox from '../components/UI/LoadingBox';
 
 const Pet = () => {
   
@@ -27,7 +28,7 @@ const Pet = () => {
     }
   }, [data, status, setPets]);
 
-  if (status === 'pending') return <h1>Loading...</h1>;
+  if (status === 'pending') return <LoadingBox/>;
   if (error) return <h1>Đã có lỗi xảy ra</h1>;
   return (
     <>

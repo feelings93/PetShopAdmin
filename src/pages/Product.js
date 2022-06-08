@@ -10,6 +10,7 @@ import { getProducts } from '../lib/api/product';
 import AddProductForm from '../components/product/AddProductForm';
 import useHttp from '../hooks/use-http';
 import ProductGrid from '../components/product/ProductGrid';
+import LoadingBox from '../components/UI/LoadingBox';
 
 const Product = () => {
   const { data, error, status, sendRequest } = useHttp(getProducts, true);
@@ -31,7 +32,7 @@ const Product = () => {
     }
   }, [data, status, setProducts]);
 
-  if (status === 'pending') return <h1>Loading...</h1>;
+  if (status === 'pending') return <LoadingBox/>;
   if (error) return <h1>Đã có lỗi xảy ra</h1>;
   return (
     <>

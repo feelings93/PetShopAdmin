@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -14,6 +13,7 @@ import { OrderContext } from '../store/order-context';
 import OrderGrid from '../components/order/OrderGrid';
 import AddOrderForm from '../components/order/AddOrderForm';
 import { getCustomers } from '../lib/api/customer';
+import LoadingBox from '../components/UI/LoadingBox';
 
 const Order = () => {
   const { data, status, sendRequest, error } = useHttp(getOrders);
@@ -82,7 +82,7 @@ const Order = () => {
     statusPets === 'pending' ||
     statusServices === 'pending' || statusCustomers === 'pending'
   )
-    return <h1>Loading...</h1>;
+    return <LoadingBox/>;
   if (error || errorProducts || errorPets || errorServices || errorCustomers)
     return <h1>Đã có lỗi xảy ra</h1>;
 

@@ -12,6 +12,7 @@ import SubCategoryGrid from '../components/sub-category/SubCategoryGrid';
 import EditSubCategoryForm from '../components/sub-category/EditSubCategoryForm';
 import { getSubCategories } from '../lib/api/sub-category';
 import { SubCategoryContext } from '../store/sub-category';
+import LoadingBox from '../components/UI/LoadingBox';
 
 const SubCategory = () => {
   const { data, error, status, sendRequest } = useHttp(getSubCategories, true);
@@ -28,7 +29,7 @@ const SubCategory = () => {
     }
   }, [data, status, setSubCategories]);
 
-  if (status === 'pending') return <h1>Loading...</h1>;
+  if (status === 'pending') return <LoadingBox/>;
   if (error) return <h1>Đã có lỗi xảy ra</h1>;
   return (
     <>

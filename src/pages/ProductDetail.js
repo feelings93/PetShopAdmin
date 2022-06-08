@@ -5,6 +5,7 @@ import useHttp from '../hooks/use-http';
 import { getCategories } from '../lib/api/category';
 import { getSubCategories } from '../lib/api/sub-category';
 import { getProduct } from '../lib/api/product';
+import LoadingBox from '../components/UI/LoadingBox';
 
 const ProductDetail = () => {
   const params = useParams();
@@ -31,7 +32,7 @@ const ProductDetail = () => {
     statusCategories === 'pending' ||
     statusSubCategories === 'pending'
   )
-    return <h1>Loading</h1>;
+    return <LoadingBox/>;
   if (
     !data ||
     error ||

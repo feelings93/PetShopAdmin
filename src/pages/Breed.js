@@ -12,6 +12,7 @@ import BreedGrid from '../components/breed/BreedGrid';
 import EditBreedForm from '../components/breed/EditBreedForm';
 import { getBreeds } from '../lib/api/breed';
 import { BreedContext } from '../store/breed-context';
+import LoadingBox from '../components/UI/LoadingBox';
 
 const Breed = () => {
   const { data, error, status, sendRequest } = useHttp(getBreeds, true);
@@ -28,7 +29,7 @@ const Breed = () => {
     }
   }, [data, status, setBreeds]);
 
-  if (status === 'pending') return <h1>Loading...</h1>;
+  if (status === 'pending') return <LoadingBox />;
   if (error) return <h1>Đã có lỗi xảy ra</h1>;
   return (
     <>

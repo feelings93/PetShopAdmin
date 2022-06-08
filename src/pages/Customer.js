@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -13,6 +12,7 @@ import CustomerGrid from '../components/customer/CustomerGrid';
 import EditCustomerForm from '../components/customer/EditCustomerForm';
 import { CustomerContext } from '../store/customer-context';
 import { getCustomers } from '../lib/api/customer';
+import LoadingBox from '../components/UI/LoadingBox';
 
 const Customer = () => {
   const { data, error, status, sendRequest } = useHttp(getCustomers, true);
@@ -36,7 +36,7 @@ const Customer = () => {
     }
   }, [data, status, setCustomers]);
 
-  if (status === 'pending') return <h1>Loading...</h1>;
+  if (status === 'pending') return <LoadingBox/>;
   if (error) return <h1>Đã có lỗi xảy ra</h1>;
   return (
     <>

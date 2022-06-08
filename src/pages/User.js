@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -13,6 +12,7 @@ import AddUserForm from '../components/user/AddUserForm';
 import EditUserForm from '../components/user/EditUserForm';
 import DelUserForm from '../components/user/DelUserForm';
 import ActiveUserForm from '../components/user/ActiveUserForm';
+import LoadingBox from '../components/UI/LoadingBox';
 
 const User = () => {
   const { data, error, status, sendRequest } = useHttp(getUsers, true);
@@ -37,7 +37,7 @@ const User = () => {
     }
   }, [data, status, setUsers]);
 
-  if (status === 'pending') return <h1>Loading...</h1>;
+  if (status === 'pending') return <LoadingBox/>;
   if (error) return <h1>Đã có lỗi xảy ra</h1>;
 
   return (

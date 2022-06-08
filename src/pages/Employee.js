@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -12,6 +11,7 @@ import EmployeeGrid from '../components/employee/EmployeeGrid';
 import EditEmployeeForm from '../components/employee/EditEmployeeForm';
 import { getEmployees } from '../lib/api/employee';
 import { EmployeeContext } from '../store/employee-context';
+import LoadingBox from '../components/UI/LoadingBox';
 
 const Employee = () => {
   const { data, error, status, sendRequest } = useHttp(getEmployees, true);
@@ -28,7 +28,7 @@ const Employee = () => {
     }
   }, [data, status, setEmployees]);
 
-  if (status === 'pending') return <h1>Loading...</h1>;
+  if (status === 'pending') return <LoadingBox />;
   if (error) return <h1>Đã có lỗi xảy ra</h1>;
   return (
     <>

@@ -5,6 +5,7 @@ import { getPet } from '../lib/api/pet';
 import { getPetTypes } from '../lib/api/pet-type';
 import { getBreeds } from '../lib/api/breed';
 import PetDetailCard from '../components/pet-detail/PetDetailCard';
+import LoadingBox from '../components/UI/LoadingBox';
 
 const PetDetail = () => {
   const params = useParams();
@@ -31,7 +32,7 @@ const PetDetail = () => {
     statusPetTypes === 'pending' ||
     statusBreeds === 'pending'
   )
-    return <h1>Loading</h1>;
+    return <LoadingBox/>;
   if (
     !data ||
     error ||

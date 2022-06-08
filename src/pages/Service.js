@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -10,7 +9,7 @@ import { getServices } from '../lib/api/service';
 import { ServiceContext } from '../store/service-context';
 import ServiceGrid from '../components/service/ServiceGrid';
 import AddServiceForm from '../components/service/AddServiceForm';
-
+import LoadingBox from '../components/UI/LoadingBox';
 
 const Service = () => {
   const { data, error, status, sendRequest } = useHttp(getServices, true);
@@ -26,7 +25,7 @@ const Service = () => {
     }
   }, [data, status, setServices]);
 
-  if (status === 'pending') return <h1>Loading...</h1>;
+  if (status === 'pending') <LoadingBox />;
   if (error) return <h1>Đã có lỗi xảy ra</h1>;
   return (
     <>

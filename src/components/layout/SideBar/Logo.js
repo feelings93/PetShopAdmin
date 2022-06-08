@@ -1,7 +1,7 @@
 import React from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import logo from '../../../assets/images/logo.png';
+import logo from '../../../assets/images/logo.svg';
 
 const Logo = () => {
   return (

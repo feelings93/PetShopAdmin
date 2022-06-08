@@ -12,12 +12,14 @@ import PetGrid from '../components/pet/PetGrid';
 import { PetContext } from '../store/pet-context';
 
 const Pet = () => {
+  
   const { data, error, status, sendRequest } = useHttp(getPets, true);
   const petCtx = useContext(PetContext);
   const { setPets, openAdd, handleOpenAdd, query, setQuery } = petCtx;
   React.useEffect(() => {
     sendRequest();
   }, [sendRequest]);
+  
 
   React.useEffect(() => {
     if (status === 'completed' && data) {
@@ -35,7 +37,7 @@ const Pet = () => {
         alignItems='center'
         direction='row'
       >
-        <Typography>Thú cưng</Typography>
+        <Typography></Typography>
         <Stack spacing={1} alignItems='center' direction='row'>
           <TextField
             size='small'

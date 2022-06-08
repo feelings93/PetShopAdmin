@@ -41,7 +41,7 @@ const Product = () => {
         alignItems='center'
         direction='row'
       >
-        <Typography>Sản phẩm</Typography>
+        <Typography></Typography>
         <Stack spacing={1} alignItems='center' direction='row'>
           <TextField
             size='small'

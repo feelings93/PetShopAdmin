@@ -1,11 +1,12 @@
 import {
+  AdminPanelSettings,
   Analytics,
-  Category,
+  Article,
   Dashboard,
+  Fastfood,
   People,
-  Person,
   Pets,
-  RoomService,
+  Spa,
 } from '@mui/icons-material';
 import React from 'react';
 import TabItem from './TabItem';
@@ -17,43 +18,23 @@ const tabList = [
     url: 'overview',
   },
   {
-    name: 'Loại thú cưng',
-    icon: <Pets />,
-    url: 'pet-type',
-  },
-  {
     name: 'Thú cưng',
     icon: <Pets />,
     url: 'pet',
   },
   {
-    name: 'Giống',
-    icon: <Pets />,
-    url: 'breed',
-  },
-  {
-    name: 'Danh mục',
-    icon: <Category />,
-    url: 'category',
-  },
-  {
-    name: 'Danh mục phụ',
-    icon: <Category />,
-    url: 'sub-category',
-  },
-  {
     name: 'Sản phẩm',
-    icon: <Pets />,
+    icon: <Fastfood />,
     url: 'product',
   },
   {
     name: 'Dịch vụ',
-    icon: <RoomService />,
+    icon: <Spa />,
     url: 'service',
   },
   {
     name: 'Đơn hàng',
-    icon: <Dashboard />,
+    icon: <Article />,
     url: 'order',
   },
   {
@@ -73,7 +54,7 @@ const tabList = [
   },
   {
     name: 'Người dùng',
-    icon: <Person />,
+    icon: <AdminPanelSettings />,
     url: 'user',
   },
 ];

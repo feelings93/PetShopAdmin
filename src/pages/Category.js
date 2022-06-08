@@ -45,7 +45,7 @@ const Category = () => {
         alignItems='center'
         direction='row'
       >
-        <Typography>Danh mục</Typography>
+        <Typography></Typography>
         <Stack spacing={1} alignItems='center' direction='row'>
           <TextField
             size='small'

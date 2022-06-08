@@ -38,7 +38,7 @@ const Breed = () => {
         alignItems='center'
         direction='row'
       >
-        <Typography>Giống</Typography>
+        <Typography></Typography>
         <Stack spacing={1} alignItems='center' direction='row'>
           <TextField
             size='small'

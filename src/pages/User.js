@@ -48,7 +48,7 @@ const User = () => {
         alignItems='center'
         direction='row'
       >
-        <Typography>Người dùng</Typography>
+        <h3>Người dùng</h3>
         <Stack spacing={1} alignItems='center' direction='row'>
           <TextField
             size='small'

@@ -46,7 +46,7 @@ const Customer = () => {
         alignItems='center'
         direction='row'
       >
-        <Typography>Khách hàng</Typography>
+        <h3>Khách hàng</h3>
         <Stack spacing={1} alignItems='center' direction='row'>
           <TextField
             size='small'

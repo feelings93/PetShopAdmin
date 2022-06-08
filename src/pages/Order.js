@@ -94,7 +94,7 @@ const Order = () => {
         alignItems='center'
         direction='row'
       >
-        <Typography>Đơn hàng</Typography>
+        <h3>Đơn hàng</h3>
         <Stack spacing={1} alignItems='center' direction='row'>
           <TextField
             size='small'

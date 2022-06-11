@@ -35,7 +35,7 @@ const Service = () => {
         alignItems='center'
         direction='row'
       >
-        <h3>Dịch vụ</h3>
+        <h3></h3>
         <Stack spacing={1} alignItems='center' direction='row'>
           <TextField
             size='small'

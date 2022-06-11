@@ -18,13 +18,13 @@ import Employee from './pages/Employee';
 import EmployeeContextProvider from './store/employee-context';
 import { useAuth } from './hooks/use-auth';
 import PetDetail from './pages/PetDetail';
-import ServiceContextProvider from './store/service-context';
-import Service from './pages/Service';
 import ServiceDetail from './pages/ServiceDetail';
 import Customer from './pages/Customer';
 import CustomerContextProvider from './store/customer-context';
 import PetAndRelations from './pages/PetAndRelations';
 import ProductAndRelations from './pages/ProductAndRelations';
+import ServiceAndRelations from './pages/ServiceAndRelations';
+import LoadingBox from './components/UI/LoadingBox';
 
 const theme = createTheme({
   palette: {
@@ -56,13 +56,13 @@ const theme = createTheme({
 
 function PrivateAdminOutlet() {
   const [data, status] = useAuth();
-  if (status === 'pending') return <h1>Loading</h1>;
+  if (status === 'pending') return <LoadingBox />;
   return data ? <Outlet /> : <Navigate to='/login' />;
 }
 
 function RedirectWhenSignedInRoute() {
   const [data, status] = useAuth();
-  if (status === 'pending') return <h1>Loading</h1>;
+  if (status === 'pending') return <LoadingBox />;
   return !data ? <Outlet /> : <Navigate to='/' />;
 }
 
@@ -107,14 +107,7 @@ function App() {
               }
             />
             <Route path='pet' element={<PetAndRelations />} />
-            <Route
-              path='service'
-              element={
-                <ServiceContextProvider>
-                  <Service />
-                </ServiceContextProvider>
-              }
-            />
+            <Route path='service' element={<ServiceAndRelations />} />
             <Route
               path='customer'
               element={

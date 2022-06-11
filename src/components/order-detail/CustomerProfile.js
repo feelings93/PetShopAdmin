@@ -23,15 +23,16 @@ const CustomerProfile = ({ order }) => {
     provinces.find((x) => x.name === order.province)
   );
   const [district, setDistrict] = useState(
-    provinces
-      .find((x) => x.name === order.province)
-      .districts.find((x) => x.name === order.district)
+    (provinces.find((x) => x.name === order.province)?.districts || []).find(
+      (x) => x.name === order.district
+    )
   );
   const [commune, setCommune] = useState(
-    provinces
-      .find((x) => x.name === order.province)
-      .districts.find((x) => x.name === order.district)
-      .wards.find((x) => x.name === order.commune)
+    (
+      (provinces.find((x) => x.name === order.province)?.districts || []).find(
+        (x) => x.name === order.district
+      )?.wards || []
+    ).find((x) => x.name === order.commune)
   );
   const { register, handleSubmit } = useForm();
 

@@ -37,11 +37,11 @@ const tabList = [
     icon: <Article />,
     url: 'order',
   },
-  {
-    name: 'Thống kê',
-    icon: <Analytics />,
-    url: 'analytic',
-  },
+  // {
+  //   name: 'Thống kê',
+  //   icon: <Analytics />,
+  //   url: 'analytic',
+  // },
   {
     name: 'Khách hàng',
     icon: <People />,
